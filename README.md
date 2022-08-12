@@ -28,3 +28,17 @@ Example of how User Scripts should look once scheduled:
 - The server I used these scripts with had an X10DRi-T4+ motherboard. I have decommissioned that server and I am no longer actively using these scripts.
 - I've used/tested these up to unRAID v6.10.3. I do remember there being a minor (but breaking) change to the awk syntax when I upgraded to 6.10.x from 6.9.2.
 - While this was designed for and only works out-of-the-box with unRAID I'm sure it can be adapted to other linux systems with a bit of knowhow. You'd need to update how the script retrieves the CPU/HDD temps for your linux flavor of choice, but the ipmitool portions should work fine.
+
+
+###  ipmitool - can't find /dev/ipmi0 or /dev/ipmidev/0
+
+You probably need to load the IPMI kernel modules:
+````
+modprobe ipmi_devintf
+modprobe ipmi_si
+````
+You can add these to /etc/modules to have them loaded automatically (just list the module names):
+````
+ipmi_devintf
+ipmi_si
+````
