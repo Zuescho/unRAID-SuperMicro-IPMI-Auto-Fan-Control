@@ -67,18 +67,18 @@ temp_thresh_drive_crit=55
 # NOTE: 'cool' cycles are for when temperatures are below 'hot1' thresholds
 #
 ### CPU FAN ZONE DUTY CYCLES 
-fan_cpu_zone_cool='0x04'
-fan_cpu_zone_hot1='0x08'
-fan_cpu_zone_hot2='0x16'
-fan_cpu_zone_hot3='0x20'
-fan_cpu_zone_crit='0x28'
+fan_cpu_zone_cool='0x32'
+fan_cpu_zone_hot1='0x32'
+fan_cpu_zone_hot2='0x64'
+fan_cpu_zone_hot3='0x64'
+fan_cpu_zone_crit='0x64'
 #
 ### PERIPHERAL FAN ZONE DUTY CYCLES 
-fan_peri_zone_cool='0x04'
-fan_peri_zone_hot1='0x08'
-fan_peri_zone_hot2='0x16'
-fan_peri_zone_hot3='0x20'
-fan_peri_zone_crit='0x28'
+fan_peri_zone_cool='0x32'
+fan_peri_zone_hot1='0x32'
+fan_peri_zone_hot2='0x64'
+fan_peri_zone_hot3='0x64'
+fan_peri_zone_crit='0x64'
 
 
 ##### DRIVES SELECTION
@@ -97,7 +97,7 @@ fan_peri_zone_crit='0x28'
 ### DRIVES TO IGNORE
 ## example: list_drives_ignored=("disk1" "parity" "parity2" "flash")
 ## to include all drives, just set this line to: list_drives_ignored=()
-list_drives_ignored=("flash" "cache_nvme")
+list_drives_ignored=("flash" "cache_nvme" "cache")
 
 
 ##### CPU PACKAGE TEMPERATURE SENSORS 
