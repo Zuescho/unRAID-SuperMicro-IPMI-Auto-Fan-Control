@@ -49,9 +49,9 @@ temp_thresh_cpu_hot3=75
 temp_thresh_cpu_crit=80
 #
 ### DRIVE TEMP THRESHOLDS
-temp_thresh_drive_hot1=45
-temp_thresh_drive_hot2=48
-temp_thresh_drive_hot3=51
+temp_thresh_drive_hot1=40
+temp_thresh_drive_hot2=45
+temp_thresh_drive_hot3=50
 temp_thresh_drive_crit=55
 
 
@@ -68,15 +68,15 @@ temp_thresh_drive_crit=55
 #
 ### CPU FAN ZONE DUTY CYCLES 
 fan_cpu_zone_cool='0x32'
-fan_cpu_zone_hot1='0x32'
+fan_cpu_zone_hot1='0x48'
 fan_cpu_zone_hot2='0x64'
 fan_cpu_zone_hot3='0x64'
 fan_cpu_zone_crit='0x64'
 #
 ### PERIPHERAL FAN ZONE DUTY CYCLES 
 fan_peri_zone_cool='0x32'
-fan_peri_zone_hot1='0x32'
-fan_peri_zone_hot2='0x64'
+fan_peri_zone_hot1='0x48'
+fan_peri_zone_hot2='0x52'
 fan_peri_zone_hot3='0x64'
 fan_peri_zone_crit='0x64'
 
