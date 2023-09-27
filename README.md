@@ -1,15 +1,21 @@
 # unRAID SuperMicro IPMI Auto Fan Control
 A pair of dirty little bash scripts to automate control of the fan speeds for a SuperMicro board using ipmitool. 
 
+## What does it do?
+- Gather all of the CPU package temps, determine max
+- Gather all of the drive temps, determine max
+- Set speeds of the fan zones based configurable temperature thresholds (5 speed settings per fan zone)
 
-# Update 27.09.2023
+
+## Update 27.09.2023
 Just updated my UnRaid server to 6.12.4 long story short, NerdPack was retired and gets uninstalled when you upgrade beyond 6.10.
 This was a pain in the ass, so this means [ipmitool](https://github.com/ipmitool/ipmitool) will be missing.
 
-## How to FIX
-- Download the last known version of ipmitool ()
+**The offered Community Apps in UnRaid IPMI Tools (bySimonF) and IPMI-Tools(Forum-Layman) did not help me, IPMI Tools uses FreeIPMI under the hood  which is not the same as ipmitool and IPMI is overkill by coming with a Web-GUI etc.**
+
+### How to FIX
 - Create folder **extra** under ``/boot/``
-- Copy ipmitool from one of your shares into that folder (You can find your shares under ``/mnt/user/...``)
+- Download last known version ``wget https://github.com/Zuescho/unRAID-SuperMicro-IPMI-Auto-Fan-Control/raw/main/ipmitool-1.8.18-x86_64-1.txz``  
 - Reboot (alternatively, you could ``installpkg ipmitool-1.8.18-x86_64-1.txz``)
 
 You still need to use   
@@ -32,24 +38,15 @@ Well after hitting my head against the wall, if u use the ``file`` command you w
 but  ``ipmitool-1.8.18-x86_64-1.txz: JSON text data``  
 so yeah lucky us...  
 to be honest we are just dumb you need to use the raw location to get the file like this
-wget   
-with this you can save the copy to share step, just download it directly into the ``/boot/extra folder``
+``wget https://github.com/Zuescho/unRAID-SuperMicro-IPMI-Auto-Fan-Control/raw/main/ipmitool-1.8.18-x86_64-1.txz``  
+with this you can, just download it directly into the ``/boot/extra folder``
 
 
-
-
-## What does it do?
-- Gather all of the CPU package temps, determine max
-- Gather all of the drive temps, determine max
-- Set speeds of the fan zones based configurable temperature thresholds (5 speed settings per fan zone)
-
-## Why?
-It started out quite awhile ago with me having trouble getting plugins/tools designed to do this to work right and just being very tired of loud fans (especially since my server is in my home office). I still wanted the fans to crank up some when heavy processing was being done, though I certainly don't need anywhere near the full throughput of those stock supermicro fans or the Dynatron CPU coolers I have installed. It's evolved over time and I've added in-line comment instructions on how to modify it to suit your own needs.
 
 ## How to run:
 This pair of scripts is specifically designed for unRAID's 'User Scripts' plugin. 
 - Install the **User Scripts** plugin
-- Install **ipmitool** (can be installed via the NerdPack GUI plugin)
+
 - Add impi_fans_startup.sh to User Scripts
   - Set to run 'At Startup of Array'
     - _NOTE: If do not want to restart your server/array after adding this script, you must also click the "Run Script" button on ipmi_fans_startup.sh one time to force the required fan modes_
@@ -62,9 +59,9 @@ Example of how User Scripts should look once scheduled:
 
 
 ### Other Notes:
-- The server I used these scripts with had an X10DRi-T4+ motherboard. I have decommissioned that server and I am no longer actively using these scripts.
-- I've used/tested these up to unRAID v6.10.3. I do remember there being a minor (but breaking) change to the awk syntax when I upgraded to 6.10.x from 6.9.2.
-- While this was designed for and only works out-of-the-box with unRAID I'm sure it can be adapted to other linux systems with a bit of knowhow. You'd need to update how the script retrieves the CPU/HDD temps for your linux flavor of choice, but the ipmitool portions should work fine.
+- The server I used these scripts with had an Supermicro X11SSM-F motherboard.
+- I've used/tested these up to unRAID v6.12.4.
+
 
 
 ###  ipmitool - can't find /dev/ipmi0 or /dev/ipmidev/0
@@ -74,8 +71,29 @@ You probably need to load the IPMI kernel modules:
 modprobe ipmi_devintf
 modprobe ipmi_si
 ````
-You can add these to /etc/modules to have them loaded automatically (just list the module names):
+Now there are many ways to call them after a reboot, UnRaid uses slackware and the ``/etc/modules`` file seems to be under  
+``/etc/rc.d`` which you can open with nano ``/etc/rc.d/modules.local``  
+just list the module names:  
 ````
 ipmi_devintf
 ipmi_si
 ````
+
+Now option 2 is to put them in the **go** file under ``nano /boot/config/go``  
+for example my go file right now
+```
+#!/bin/bash
+# Start the Management Utility
+/usr/local/sbin/emhttp &
+
+
+modprobe ipmi_devintf
+modprobe ipmi_si
+
+```
+
+Sadly i could not find any documentation on the go file or my googling is just becoming worse, well to keep it simple, after rebooting this file will be executed so if you put the commands here unRaid will execute them itself.
+
+Now if there is a race condition between installing the ipmitool package and executed this command i do not know, but i hope not.
+
+# Thanks to @dalkain for first creating this.
