@@ -1,6 +1,43 @@
 # unRAID SuperMicro IPMI Auto Fan Control
 A pair of dirty little bash scripts to automate control of the fan speeds for a SuperMicro board using ipmitool. 
 
+
+# Update 27.09.2023
+Just updated my UnRaid server to 6.12.4 long story short, NerdPack was retired and gets uninstalled when you upgrade beyond 6.10.
+This was a pain in the ass, so this means [ipmitool](https://github.com/ipmitool/ipmitool) will be missing.
+
+## How to FIX
+- Download the last known version of ipmitool ()
+- Create folder **extra** under ``/boot/``
+- Copy ipmitool from one of your shares into that folder (You can find your shares under ``/mnt/user/...``)
+- Reboot (alternatively, you could ``installpkg ipmitool-1.8.18-x86_64-1.txz``)
+
+You still need to use   
+``modprobe ipmi_devintf``  
+``modprobe ipmi_si``  
+or else it won't find any sensors
+
+### Why folder extra?
+UnRaid installs packages that are in these folders a boot, so you will need it to be there.
+
+
+### Why do i get an error when i try to install it, after downloading the .txz via wget.
+```
+installpkg ipmitool-1.8.18-x86_64-1.txz
+Verifying package ipmitool-1.8.18-x86_64-1.txz.
+xz: (stdin): File format not recognized
+Unable to install ipmitool-1.8.18-x86_64-1.txz:  tar archive is corrupt (tar returned error code 2)
+```
+Well after hitting my head against the wall, if u use the ``file`` command you will notice that it is not an  ``ipmitool-1.8.18-x86_64-1.txz: XZ compressed data, checksum CRC64``  
+but  ``ipmitool-1.8.18-x86_64-1.txz: JSON text data``  
+so yeah lucky us...  
+to be honest we are just dumb you need to use the raw location to get the file like this
+wget   
+with this you can save the copy to share step, just download it directly into the ``/boot/extra folder``
+
+
+
+
 ## What does it do?
 - Gather all of the CPU package temps, determine max
 - Gather all of the drive temps, determine max
